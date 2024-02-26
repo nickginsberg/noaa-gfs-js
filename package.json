@@ -1,0 +1,33 @@
+{
+  "name": "noaa-gfs-js",
+  "version": "1.0.0",
+  "description": "A lightweight library for accessing and processing NOAA GFS (Global Forecasting System) weather without 3rd party dependencies",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "jshint --verbose index.js test/gfs.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickginsberg/noaa-gfs-js.git"
+  },
+  "keywords": [
+    "noaa",
+    "weather",
+    "gfs",
+    "grib",
+    "grib2",
+    "nomads",
+    "opendap"
+  ],
+  "author": "Nicholas Ginsberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nickginsberg/noaa-gfs-js/issues"
+  },
+  "homepage": "https://github.com/nickginsberg/noaa-gfs-js#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jshint": "^2.13.6"
+  }
+}
