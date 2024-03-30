@@ -42,7 +42,7 @@ function get_result_metadata(gfs_response) {
     * @param  {string} gfs_response The raw response data from GFS
     * @return {object} Returns an object with the following fields: lat, lon, time, lev, last_row, where last_row represents the end of the data section.
     */
-    const to_return = {
+    const metadata = {
         'lat': [],
         'lon': [],
         'time': [],
@@ -50,17 +50,17 @@ function get_result_metadata(gfs_response) {
         'last_row': -1
     };
     const response_split = gfs_response.split('\n');
-    for (var i = response_split.length - 2; i >= 0; i--) {
+    for (let i = response_split.length - 2; i >= 0; i--) {
         if(response_split[i] === '' && response_split[i+1] === '') {
-            to_return.last_row = i;
+            metadata.last_row = i;
             break;
         }
-        if(response_split[i].startsWith('lat')) to_return.lat = response_split[i+1].split(', ').map((each) => parseFloat(each));
-        if(response_split[i].startsWith('lon')) to_return.lon = response_split[i+1].split(', ').map((each) => parseFloat(each));
-        if(response_split[i].startsWith('time')) to_return.time = response_split[i+1].split(', ').map((each) => parseFloat(each));
-        if(response_split[i].startsWith('lev')) to_return.lev = response_split[i+1].split(', ').map((each) => parseFloat(each));
+        if(response_split[i].startsWith('lat')) metadata.lat = response_split[i+1].split(', ').map((each) => parseFloat(each));
+        if(response_split[i].startsWith('lon')) metadata.lon = response_split[i+1].split(', ').map((each) => parseFloat(each));
+        if(response_split[i].startsWith('time')) metadata.time = response_split[i+1].split(', ').map((each) => parseFloat(each));
+        if(response_split[i].startsWith('lev')) metadata.lev = response_split[i+1].split(', ').map((each) => parseFloat(each));
     }
-    return to_return;
+    return metadata;
 }
 
 function get_gfs_data(
@@ -104,25 +104,25 @@ function get_gfs_data(
     lon_end = Math.max((lon_start_input + 360) % 360, (lon_end_input + 360) % 360);
 
     // Map each to their respective increments, this will be useful when we figure out proper indexes
-    const resolution_option_increments = {
+    const RESOLUTION_INCREMENTS = {
         "1p00": 1,
         "0p50": 0.5,
         "0p25": 0.25
     };
     // Compute the indexes for lat/lon to start/end
-    const lat_start_index = Math.floor((lat_start) / resolution_option_increments[resolution]);
-    const lat_end_index = Math.ceil((lat_end) / resolution_option_increments[resolution]);
-    const lon_start_index = Math.floor((lon_start) / resolution_option_increments[resolution]);
-    const lon_end_index = Math.ceil((lon_end) / resolution_option_increments[resolution]);
+    const lat_start_index = Math.floor((lat_start) / RESOLUTION_INCREMENTS[resolution]);
+    const lat_end_index = Math.ceil((lat_end) / RESOLUTION_INCREMENTS[resolution]);
+    const lon_start_index = Math.floor((lon_start) / RESOLUTION_INCREMENTS[resolution]);
+    const lon_end_index = Math.ceil((lon_end) / RESOLUTION_INCREMENTS[resolution]);
 
     let altitude = '';
     // Only these fields have an altitude component. Set it to [1], which is roughly surface level.
     // Future improvement to allow this to be customized as well.
-    if ([
+    const FIELDS_WITH_ALTITUDE = new Set([
         'absvprs', 'clwmrprs', 'dzdtprs', 'grleprs', 'hgtprs', 'icmrprs', 'o3mrprs', 'rhprs',
-        'rwmrprs', 'snmrprs', 'spfhprs', 'tmpprs', 'ugrdprs', 'vgrdprs', 'vvelprs'].includes(field)) {
-        altitude = '[1]';
-    }
+        'rwmrprs', 'snmrprs', 'spfhprs', 'tmpprs', 'ugrdprs', 'vgrdprs', 'vvelprs',
+    ]);
+    if (FIELDS_WITH_ALTITUDE.has(field)) altitude = '[1]';
 
     // Get the NOAA URL
     url = `https://nomads.ncep.noaa.gov/dods/gfs_${resolution}/gfs${forecast_date}/gfs_${resolution}_${forecast_time}z.ascii?${field}[0:${forward_times_included}]${altitude}[${lat_start_index}:${lat_end_index}][${lon_start_index}:${lon_end_index}]`;
