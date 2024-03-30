@@ -23,7 +23,7 @@ The goal of the library is to be simple to use. The get_gfs_data function takes 
 ```javascript
 import * as noaa_gfs from 'noaa-gfs-js';
 
-get_gfs_data(
+noaa_gfs.get_gfs_data(
     '0p25', // Options are 0p25, 0p50, or 1p00
     new Date(Date.now() - 86400000).toISOString().split('T')[0].replaceAll('-',''), // YYYMMDD format date
     '00', // Every 6 hours. 00, 06, 12, or 18
