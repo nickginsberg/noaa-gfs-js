@@ -98,10 +98,10 @@ function get_gfs_data(
     // We start at 0.0 degrees as point 0
     // Working our way up in increments of 0.25, we see that 5.75 is the 23rd index and 6.0 is the 24th
     // So we want to use index 23 as our start. If it were the end bound, we'd use 24 as the end index.
-    lat_start = Math.min(lat_start_input + 90, lat_end_input + 90);
-    lat_end = Math.max(lat_start_input + 90, lat_end_input + 90);
-    lon_start = Math.min((lon_start_input + 360) % 360, (lon_end_input + 360) % 360);
-    lon_end = Math.max((lon_start_input + 360) % 360, (lon_end_input + 360) % 360);
+    const lat_start = Math.min(lat_start_input + 90, lat_end_input + 90);
+    const lat_end = Math.max(lat_start_input + 90, lat_end_input + 90);
+    const lon_start = Math.min((lon_start_input + 360) % 360, (lon_end_input + 360) % 360);
+    const lon_end = Math.max((lon_start_input + 360) % 360, (lon_end_input + 360) % 360);
 
     // Map each to their respective increments, this will be useful when we figure out proper indexes
     const RESOLUTION_INCREMENTS = {
