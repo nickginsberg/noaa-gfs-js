@@ -1,6 +1,6 @@
 {
   "name": "noaa-gfs-js",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A lightweight library for accessing and processing NOAA GFS (Global Forecasting System) weather without 3rd party dependencies",
   "main": "index.js",
   "scripts": {
