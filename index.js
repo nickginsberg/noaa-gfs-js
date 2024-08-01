@@ -13,7 +13,7 @@ function noaa_time_to_utc_datetime(noaa_time) {
     * @param  {float} noaa_time The days since year 0 including fractions
     * @return {string} Returns a string representing the time
     */
-    const result = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+    const result = new Date(Date.UTC(0, 0, 1, 0, 0, 0));
     result.setFullYear(0);
     // Note: Subtract 1 from noaa time in days because otherwise we double count Jan 1, 0000
     result.setDate(result.getDate() + Math.floor(noaa_time - 1));

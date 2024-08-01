@@ -3,7 +3,9 @@
 const noaa_gfs = require('../index');
 
 test('convert a NOAA GFS style date to a UTC date', () => {
-  expect(noaa_gfs.noaa_time_to_utc_datetime(738931.25)).toBe("2/13/2024, 6:00:00 AM");
+  expect(noaa_gfs.noaa_time_to_utc_datetime(738931.25)).toBe("2/14/2024, 6:00:00 AM");
+  expect(noaa_gfs.noaa_time_to_utc_datetime(739099.5)).toBe("7/31/2024, 12:00:00 PM");
+  expect(noaa_gfs.noaa_time_to_utc_datetime(739099.875)).toBe("7/31/2024, 9:00:00 PM");
 });
 
 
