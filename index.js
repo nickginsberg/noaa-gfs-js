@@ -10,21 +10,21 @@ function noaa_time_to_utc_datetime(noaa_time) {
     * Handy function to convert times from the NOAA format
     * NOAA times are days since year 0 (not 1900, legit year 0)
     * So 738931.25 is Feb 14th, 2024, at 6:00 AM (738,931 full days and .25 days = 6 hours)
-    * @param  {float} noaa_time The days since year 0 including fractions
+    * @param  {float} noaa_time The days since year 1 including fractions
     * @return {string} Returns a string representing the time
     */
     const result = new Date(Date.UTC(0, 0, 1, 0, 0, 0));
-    result.setFullYear(0);
+    result.setUTCFullYear(1);
     // Note: Subtract 1 from noaa time in days because otherwise we double count Jan 1, 0000
-    result.setDate(result.getDate() + Math.floor(noaa_time - 1));
+    result.setUTCDate(result.getUTCDate() + Math.floor(noaa_time - 1));
     // Convert the fraction of a day into hours/minutes
     const day_frac = noaa_time - Math.floor(noaa_time);
     const minutes_elapsed_in_day = day_frac * mins_per_day;
     const hours_elapsed_in_day = Math.floor(minutes_elapsed_in_day / 60);
     const minutes_remainder = minutes_elapsed_in_day - hours_elapsed_in_day * 60;
-    result.setHours(hours_elapsed_in_day);
-    result.setMinutes(minutes_remainder);
-    return result.toLocaleString();
+    result.setUTCHours(hours_elapsed_in_day);
+    result.setUTCMinutes(minutes_remainder);
+    return result;
 }
 
 function get_result_metadata(gfs_response) {
@@ -184,7 +184,7 @@ function get_gfs_data(
         metadata.time.forEach((time, time_idx) => {
             metadata.lat.forEach((lat, lat_idx) => {
                 metadata.lon.forEach((lon, lon_idx) => {
-                    const time_adj = convert_times ? noaa_time_to_utc_datetime(time) : time;
+                    const time_adj = convert_times ? noaa_time_to_utc_datetime(time).toUTCString() : time;
                     const value_parsed = parseFloat(time_data_blocks[time_idx][lat_idx][lon_idx]);
                     const lon_adj = lon - 360; // Convert it back
                     res_arr.push({

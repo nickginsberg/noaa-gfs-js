@@ -3,9 +3,9 @@
 const noaa_gfs = require('../index');
 
 test('convert a NOAA GFS style date to a UTC date', () => {
-  expect(noaa_gfs.noaa_time_to_utc_datetime(738931.25)).toBe("2/14/2024, 6:00:00 AM");
-  expect(noaa_gfs.noaa_time_to_utc_datetime(739099.5)).toBe("7/31/2024, 12:00:00 PM");
-  expect(noaa_gfs.noaa_time_to_utc_datetime(739099.875)).toBe("7/31/2024, 9:00:00 PM");
+  expect(noaa_gfs.noaa_time_to_utc_datetime(738931.25).toUTCString()).toBe(new Date("2024-02-15T06:00:00.000Z").toUTCString());
+  expect(noaa_gfs.noaa_time_to_utc_datetime(739099.5).toUTCString()).toBe(new Date("2024-08-01T12:00:00.000Z").toUTCString());
+  expect(noaa_gfs.noaa_time_to_utc_datetime(739099.875).toUTCString()).toBe(new Date("2024-08-01T21:00:00.000Z").toUTCString());
 });
 
 
@@ -104,7 +104,7 @@ test('get GFS data', () => {
     expect(res.array_format[1].lon).toBe(-74);
     expect(res.obj_format[res.times[3]]['40.5']['-74']).toBeGreaterThan(0);
     expect(res.obj_format[res.times[3]]['40.5']['-74']).toBeLessThan(100);
-    expect(Object.keys(res.obj_format)).toEqual(res.times);
+    expect(Object.keys(res.obj_format)).toEqual(res.times.map((each) => each.toUTCString()));
     expect(parseFloat(Object.keys(res.obj_format[res.times[3]]))).toEqual(res.lats[0]);
     expect(parseFloat(Object.keys(res.obj_format[res.times[3]][res.lats[0]]))).toEqual(res.lons[0]);
   });
